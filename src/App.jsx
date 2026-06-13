@@ -147,16 +147,16 @@ export default function App() {
             </p>
 
             <div className="heroBadges premiumBadges">
-  <span>🛡️ Cơ sở vật chất hiện đại</span>
-  <span>💛 Giáo viên nhiệt huyết</span>
+  <span>🛡️ Cơ sở hiện đại</span>
+  <span>💛 Cô giáo tận tâm</span>
   <span>🌿 Dinh dưỡng khoa học</span>
-  <span>🔒 An toàn tuyệt đối</span>
+  <span>🔒 An toàn mỗi ngày</span>
 </div>
 
 <div className="heroInfoBar">
   <div>
     <b>📍 Địa chỉ</b>
-    <span>Tân Quý Tây, Bình Chánh, TP. Hồ Chí Minh</span>
+    <span>Tân Quý Tây, Bình Chánh</span>
   </div>
 
   <div>
@@ -165,8 +165,8 @@ export default function App() {
   </div>
 
   <div>
-    <b>🕒 Giờ hoạt động</b>
-    <span>Thứ 2 - Thứ 7: 6:30 - 17:30</span>
+    <b>🕒 Giờ học</b>
+    <span>Thứ 2 - Thứ 7 · 6:30 - 17:30</span>
   </div>
 </div>
 
