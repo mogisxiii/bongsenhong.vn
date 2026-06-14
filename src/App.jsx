@@ -331,20 +331,167 @@ export default function App() {
           <p>Nhà trường sẽ liên hệ để xác nhận lịch phù hợp.</p>
         </div>
 
-        <form className="leadForm">
-          <input type="text" placeholder="Tên phụ huynh" />
-          <input type="tel" placeholder="Số điện thoại" />
-          <select defaultValue="">
-            <option value="" disabled>Tuổi / năm sinh của bé</option>
-            <option>12 - 18 tháng</option>
-            <option>18 - 24 tháng</option>
-            <option>2 - 3 tuổi</option>
-            <option>3 - 4 tuổi</option>
-            <option>4 - 5 tuổi</option>
-          </select>
-          <button type="button">Đặt lịch tham quan</button>
-          <span>Thông tin chỉ dùng để tư vấn tuyển sinh.</span>
-        </form>
+        <form
+  className="leadForm"
+  onSubmit={async (e) => {
+    e.preventDefault();
+
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxMkax4XkTFJ_J9c1P8J4TCV8PX4FlOltL_OlS_a0kgJzTreLzC1WqeDaI8WgcdfoVA6w/exec';
+
+    const form = e.currentTarget;
+    const submitButton = form.querySelector('button[type="submit"]');
+
+    const parentName = form.parentName.value.trim();
+    const phone = form.phone.value.trim();
+    const childAge = form.childAge.value.trim();
+    const website = form.website.value.trim();
+
+    if (website) return;
+
+    if (!parentName || !phone || !childAge) {
+      alert('Ba mẹ vui lòng nhập đầy đủ thông tin.');
+      return;
+    }
+
+    const phoneDigits = phone.replace(/\D/g, '');
+    const normalizedPhone =
+      phoneDigits.startsWith('84')
+        ? '0' + phoneDigits.slice(2)
+        : phoneDigits.length === 9
+          ? '0' + phoneDigits
+          : phoneDigits;
+
+    if (!/^(03|05|07|08|09)\d{8}$/.test(normalizedPhone)) {
+      alert('Số điện thoại chưa đúng định dạng. Ba mẹ vui lòng kiểm tra lại.');
+      return;
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const getBrowser = () => {
+      const ua = navigator.userAgent.toLowerCase();
+
+      if (ua.includes('edg/')) return 'Edge';
+      if (ua.includes('opr/') || ua.includes('opera')) return 'Opera';
+      if (ua.includes('chrome') || ua.includes('crios')) return 'Chrome';
+      if (ua.includes('safari')) return 'Safari';
+      if (ua.includes('firefox') || ua.includes('fxios')) return 'Firefox';
+
+      return 'Khác';
+    };
+
+    const getOS = () => {
+      const ua = navigator.userAgent.toLowerCase();
+
+      if (ua.includes('iphone') || ua.includes('ipad') || ua.includes('ipod')) return 'iOS';
+      if (ua.includes('android')) return 'Android';
+      if (ua.includes('windows')) return 'Windows';
+      if (ua.includes('mac os') || ua.includes('macintosh')) return 'macOS';
+
+      return 'Khác';
+    };
+
+    const getDeviceType = () => {
+      const ua = navigator.userAgent.toLowerCase();
+
+      if (ua.includes('ipad') || ua.includes('tablet')) return 'Tablet';
+      if (ua.includes('mobile') || ua.includes('android') || ua.includes('iphone')) return 'Mobile';
+
+      return 'Desktop';
+    };
+
+    const getChannel = () => {
+      const utmSource = (urlParams.get('utm_source') || '').toLowerCase();
+      const referrer = document.referrer.toLowerCase();
+
+      if (utmSource.includes('facebook') || referrer.includes('facebook.com')) return 'Facebook';
+      if (utmSource.includes('zalo') || referrer.includes('zalo')) return 'Zalo';
+      if (utmSource.includes('google') || referrer.includes('google.')) return 'Google';
+      if (utmSource.includes('tiktok') || referrer.includes('tiktok')) return 'TikTok';
+      if (!referrer) return 'Direct';
+
+      return 'Referral';
+    };
+
+    submitButton.disabled = true;
+    submitButton.textContent = 'Đang gửi...';
+
+    try {
+      await fetch(API_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
+        body: JSON.stringify({
+          parentName,
+          phone: normalizedPhone,
+          childAge,
+          website,
+          source: 'Website Bông Sen Hồng',
+          channel: getChannel(),
+          utmSource: urlParams.get('utm_source') || '',
+          utmMedium: urlParams.get('utm_medium') || '',
+          utmCampaign: urlParams.get('utm_campaign') || '',
+          pageUrl: window.location.href,
+          referrer: document.referrer || '',
+          userAgent: navigator.userAgent,
+          deviceType: getDeviceType(),
+          os: getOS(),
+          browser: getBrowser(),
+          note: 'Đăng ký tham quan từ landing page',
+        }),
+      });
+
+      alert('Nhà trường đã nhận thông tin. Cô sẽ liên hệ lại sớm ạ.');
+      form.reset();
+    } catch (error) {
+      alert('Chưa gửi được thông tin. Ba mẹ vui lòng thử lại hoặc gọi trực tiếp nhà trường.');
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = 'Đặt lịch tham quan';
+    }
+  }}
+>
+  <input
+    name="website"
+    type="text"
+    tabIndex="-1"
+    autoComplete="off"
+    style={{ display: 'none' }}
+  />
+
+  <input
+    name="parentName"
+    type="text"
+    placeholder="Tên phụ huynh"
+    autoComplete="name"
+    required
+  />
+
+  <input
+    name="phone"
+    type="tel"
+    placeholder="Số điện thoại"
+    autoComplete="tel"
+    required
+  />
+
+  <select name="childAge" defaultValue="" required>
+    <option value="" disabled>
+      Tuổi / năm sinh của bé
+    </option>
+    <option value="12 - 18 tháng">12 - 18 tháng</option>
+    <option value="18 - 24 tháng">18 - 24 tháng</option>
+    <option value="2 - 3 tuổi">2 - 3 tuổi</option>
+    <option value="3 - 4 tuổi">3 - 4 tuổi</option>
+    <option value="4 - 5 tuổi">4 - 5 tuổi</option>
+  </select>
+
+  <button type="submit">Đặt lịch tham quan</button>
+
+  <span>Thông tin chỉ dùng để tư vấn tuyển sinh.</span>
+</form>
       </section>
 
       <footer className="footer">
