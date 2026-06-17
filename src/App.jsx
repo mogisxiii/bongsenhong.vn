@@ -156,7 +156,7 @@ export default function App() {
 <div className="heroInfoBar">
   <div>
     <b>📍 Địa chỉ</b>
-    <span>Tân Quý Tây, Bình Chánh</span>
+    <span>1172 Đoàn Nguyễn Tuấn, Ấp 30, Xã Bình Chánh, TPHCM</span>
   </div>
 
   <div>
