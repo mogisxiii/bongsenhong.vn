@@ -49,7 +49,7 @@
   ];
 
   const mealImages = [
-    '/images/meals/meal-4.jpg',
+    '/images/meals/meal-4a.jpg',
     '/images/meals/meal-5.jpg',
     '/images/meals/thucdonmau1.jpg',
     '/images/meals/thucdonmau7.jpg',
@@ -296,7 +296,7 @@
         <section id="hoc-phi" className="feeBand">
           <div>
             <p className="eyebrow">Tư vấn tuyển sinh</p>
-            <h2>Nhận học phí theo độ tuổi của bé</h2>
+            <h2>Nhận học phí theo tuổi bé</h2>
             <p>
               Để lại số điện thoại, nhà trường sẽ tư vấn chương trình phù hợp và hẹn lịch tham quan.
             </p>
@@ -322,7 +322,7 @@
               </a>
             </div>
 
-            <img src="/images/media/location-1.jpg" alt="Vị trí Bông Sen Hồng" />
+            <img src="/images/media/location-1a.jpg" alt="Vị trí Bông Sen Hồng" />
           </div>
         </section>
 
